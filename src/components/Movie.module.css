@@ -6,6 +6,7 @@
   border-radius: 12px;
   text-align: center;
   color: white;
+  animation: movie-appear 500ms ease-out forwards;
 }
 
 .movie h2 {
@@ -17,4 +18,15 @@
   color: #eccf77;
   margin: 0;
   font-size: 1rem;
+}
+
+@keyframes movie-appear {
+  from {
+    opacity: 0;
+    transform: translateY(-3rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0rem);
+  }
 }

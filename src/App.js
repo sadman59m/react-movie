@@ -15,25 +15,27 @@ function App() {
     try {
       setError(null);
       setIsLoading(true);
-      const apiKey = "api_key=ef64498e81f793cbb78eaef9c83167da";
-      const baseUrl = "https://api.themoviedb.org/3";
-      const apiUrl =
-        baseUrl + "/discover/movie?sort_by=popularity.desc&" + apiKey;
-      const response = await fetch(apiUrl);
+      // const apiKey = "api_key=ef64498e81f793cbb78eaef9c83167da";
+      // const baseUrl = "https://api.themoviedb.org/3";
+      // const apiUrl =
+      //   baseUrl + "/discover/movie?sort_by=popularity.desc&" + apiKey;
+      const response = await fetch(
+        "https://react-http-b9988-default-rtdb.firebaseio.com/moives.json"
+      );
       if (!response.ok) {
         throw new Error("Something went wrong!");
       }
       const data = await response.json();
-      console.log(data);
-      const fetchedMovies = data.results.map((movie) => {
-        return {
-          id: movie.id,
-          title: movie.original_title,
-          openingText: movie.overview,
-          releaseDate: movie.release_date,
-        };
-      });
-      setMovies(fetchedMovies);
+      const loadedMovies = [];
+      for (let key in data) {
+        loadedMovies.push({
+          id: key,
+          title: data[key].title,
+          openingText: data[key].openingText,
+          releaseDate: data[key].releaseDate,
+        });
+      }
+      setMovies(loadedMovies);
     } catch (error) {
       setError(error.message);
     }
@@ -45,8 +47,20 @@ function App() {
     getMoviesHandler();
   }, [getMoviesHandler]);
 
-  function addMovieHandler(movie) {
-    console.log(movie);
+  async function addMovieHandler(movie) {
+    const response = await fetch(
+      "https://react-http-b9988-default-rtdb.firebaseio.com/moives.json",
+      {
+        method: "POST",
+        body: JSON.stringify(movie),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const data = await response.json();
+    console.log("movie created");
+    console.log(data);
   }
 
   let content;
