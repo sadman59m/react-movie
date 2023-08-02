@@ -61,6 +61,7 @@ function App() {
     const data = await response.json();
     console.log("movie created");
     console.log(data);
+    getMoviesHandler();
   }
 
   let content;
